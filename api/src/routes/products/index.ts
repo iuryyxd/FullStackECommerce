@@ -6,13 +6,18 @@ import {
   getProductById,
   updateProduct,
 } from "./controller";
+import { validateData } from "../../middlewares/validation-middleware";
+import {
+  createProductSchema,
+  updateProductSchema,
+} from "../../db/products-schema";
 
 const router = Router();
 
 router.get("/", listProducts);
-router.post("/", createProduct);
+router.post("/", validateData(createProductSchema), createProduct);
 router.get("/:id", getProductById);
-router.put("/:id", updateProduct);
+router.put("/:id", validateData(updateProductSchema), updateProduct);
 router.delete("/:id", deleteProduct);
 
 export default router;

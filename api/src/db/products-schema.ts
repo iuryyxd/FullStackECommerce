@@ -5,6 +5,7 @@ import {
   serial,
   text,
 } from "drizzle-orm/pg-core";
+import { createInsertSchema } from "drizzle-zod";
 
 export const productsTable = pgTable("products", {
   id: serial("id").primaryKey(),
@@ -14,5 +15,12 @@ export const productsTable = pgTable("products", {
   price: doublePrecision("price").notNull(),
 });
 
-export type InsertProduct = typeof productsTable.$inferInsert;
-export type SelectProduct = typeof productsTable.$inferSelect;
+export const createProductSchema = createInsertSchema(productsTable).omit({
+  id: true,
+});
+
+export const updateProductSchema = createInsertSchema(productsTable)
+  .omit({
+    id: true,
+  })
+  .partial();
