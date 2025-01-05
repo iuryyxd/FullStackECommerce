@@ -11,13 +11,26 @@ import {
   createProductSchema,
   updateProductSchema,
 } from "../../db/products-schema";
+import { verifySeller, verifyToken } from "../../middlewares/auth-middleware";
 
 const router = Router();
 
 router.get("/", listProducts);
-router.post("/", validateData(createProductSchema), createProduct);
+router.post(
+  "/",
+  verifyToken,
+  verifySeller,
+  validateData(createProductSchema),
+  createProduct
+);
 router.get("/:id", getProductById);
-router.put("/:id", validateData(updateProductSchema), updateProduct);
-router.delete("/:id", deleteProduct);
+router.put(
+  "/:id",
+  verifyToken,
+  verifySeller,
+  validateData(updateProductSchema),
+  updateProduct
+);
+router.delete("/:id", verifyToken, verifySeller, deleteProduct);
 
 export default router;
